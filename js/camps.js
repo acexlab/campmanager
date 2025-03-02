@@ -231,8 +231,8 @@ function showUserCurrentLocation() {
                 icon: L.divIcon({
                     className: 'user-location-marker',
                     html: '<div class="user-location-dot"></div>',
-                    iconSize: [16, 16],
-                    iconAnchor: [8, 8]
+                    iconSize: [12, 12],
+                    iconAnchor: [6, 6]
                 }),
                 zIndexOffset: 1000
             }).addTo(map);

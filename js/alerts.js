@@ -264,7 +264,7 @@ function showUserCurrentLocationOnAlertMap() {
             alertUserLocationMarker = L.marker([lat, lng], {
                 icon: L.divIcon({
                     className: 'user-location-marker',
-                    html: '<div class="user-location-dot" style="background-color: blue; border-radius: 50%; width: 12px; height: 12px;"></div>',
+                    html: '<div class="user-location-dot"></div>',
                     iconSize: [12, 12],
                     iconAnchor: [6, 6]
                 }),
