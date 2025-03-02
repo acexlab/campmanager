@@ -60,7 +60,7 @@ function updateSelectedLocationMarker(location) {
             iconAnchor: [6, 6]
         })
     }).addTo(map);
-    
+
     // Pan the map to the selected location
     map.panTo(location);
 }
@@ -104,8 +104,12 @@ function loadCamps() {
             <div>
                 <strong>${camp.name}</strong>
                 <div class="small text-muted">Capacity: ${camp.capacity} people</div>
+                <button class="btn btn-sm btn-success mt-2 get-directions-btn" data-lat="${camp.location.lat}" data-lng="${camp.location.lng}">
+                    <i class="fas fa-directions"></i> Directions
+                </button>
             </div>
         `;
+
 
         // Add delete button if logged in
         if (checkLoggedIn()) {
@@ -139,6 +143,16 @@ function loadCamps() {
         const group = L.featureGroup(markers);
         map.fitBounds(group.getBounds().pad(0.1));
     }
+    // Add event listeners to get directions buttons after they are added to the DOM
+    const directionsButtons = document.querySelectorAll('.get-directions-btn');
+    directionsButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const lat = parseFloat(this.dataset.lat);
+            const lng = parseFloat(this.dataset.lng);
+            // Implement your navigation logic here.  Example using Google Maps:
+            window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, '_blank');
+        });
+    });
 }
 
 function setupEventListeners() {
@@ -149,14 +163,14 @@ function setupEventListeners() {
             showUserCurrentLocation();
         });
     }
-    
+
     // Update map from coordinates button
     const updateMapFromCoordsBtn = document.getElementById('updateMapFromCoords');
     if (updateMapFromCoordsBtn) {
         updateMapFromCoordsBtn.addEventListener('click', function() {
             const lat = parseFloat(document.getElementById('campLat').value);
             const lng = parseFloat(document.getElementById('campLng').value);
-            
+
             if (!isNaN(lat) && !isNaN(lng)) {
                 selectedLocation = L.latLng(lat, lng);
                 updateSelectedLocationMarker(selectedLocation);
@@ -228,7 +242,7 @@ function showUserCurrentLocation() {
         map.removeLayer(userLocationCircle);
         userLocationCircle = null;
     }
-    
+
     // Also clear selected location marker if exists
     if (userMarker) {
         map.removeLayer(userMarker);
@@ -258,12 +272,12 @@ function showUserCurrentLocation() {
                 fillColor: '#007BFF',
                 fillOpacity: 0.2
             }).addTo(map);
-            
+
             // Set the coordinates in the input fields and update selected location
             document.getElementById('campLat').value = lat.toFixed(6);
             document.getElementById('campLng').value = lng.toFixed(6);
             selectedLocation = L.latLng(lat, lng);
-            
+
         }, function(error) {
             alert('Error getting location: ' + error.message);
         });

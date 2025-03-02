@@ -525,3 +525,78 @@ footer hr {
         box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
     }
 }
+
+/* Dark Mode Styles */
+.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+/* Dark mode card styles */
+.dark-mode .card {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .card-header:not(.bg-primary):not(.bg-danger):not(.bg-success):not(.bg-warning) {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+}
+
+.dark-mode .list-group-item {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+    border-color: #3d3d3d;
+}
+
+.dark-mode .text-muted {
+    color: #adb5bd !important;
+}
+
+/* Dark mode form styles */
+.dark-mode .form-control,
+.dark-mode .form-select {
+    background-color: #2d2d2d;
+    border-color: #3d3d3d;
+    color: #e0e0e0;
+}
+
+.dark-mode .form-control:focus,
+.dark-mode .form-select:focus {
+    background-color: #353535;
+    color: #f0f0f0;
+}
+
+.dark-mode .form-label {
+    color: #e0e0e0;
+}
+
+.dark-mode .input-group-text {
+    background-color: #3d3d3d;
+    border-color: #4d4d4d;
+    color: #e0e0e0;
+}
+
+/* Dark mode table styles */
+.dark-mode .table {
+    color: #e0e0e0;
+}
+
+.dark-mode .table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .table th,
+.dark-mode .table td {
+    border-color: #3d3d3d;
+}
+
+/* Dark mode toggle styles */
+.form-check-input {
+    cursor: pointer;
+}
+
+.form-check-label {
+    cursor: pointer;
+}

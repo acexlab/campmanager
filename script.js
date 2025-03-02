@@ -1,4 +1,3 @@
-
 // Global variables and utility functions shared across pages
 
 // Check if user is logged in
@@ -18,7 +17,7 @@ function checkLoggedIn() {
 // Setup logout functionality
 document.addEventListener('DOMContentLoaded', function() {
     checkLoggedIn();
-    
+
     // Set up logout functionality
     const logoutLink = document.getElementById('logoutLink');
     if (logoutLink) {
@@ -30,12 +29,15 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = 'index.html';
         });
     }
+
+    // Initialize dark mode
+    initDarkMode();
 });
 
 // Activity management
 function addActivity(message, type = 'info', details = null) {
     const activities = getActivities();
-    
+
     // Create new activity
     const activity = {
         id: Date.now(),
@@ -44,18 +46,18 @@ function addActivity(message, type = 'info', details = null) {
         timestamp: new Date().toISOString(),
         details: details
     };
-    
+
     // Add to beginning of array
     activities.unshift(activity);
-    
+
     // Keep only latest 50 activities
     if (activities.length > 50) {
         activities.pop();
     }
-    
+
     // Save to localStorage
     localStorage.setItem('activities', JSON.stringify(activities));
-    
+
     return activity;
 }
 
@@ -82,7 +84,7 @@ function saveCamp(camp) {
 function deleteCamp(campId) {
     const camps = getCamps();
     const campIndex = camps.findIndex(camp => camp.id == campId);
-    
+
     if (campIndex !== -1) {
         const campName = camps[campIndex].name;
         camps.splice(campIndex, 1);
@@ -107,7 +109,7 @@ function getResources() {
 function addResource(type, quantity) {
     const resources = getResources();
     const lowerType = type.toLowerCase();
-    
+
     if (lowerType in resources) {
         resources[lowerType] += parseInt(quantity);
         localStorage.setItem('resources', JSON.stringify(resources));
@@ -119,7 +121,7 @@ function addResource(type, quantity) {
 function removeResource(type, quantity) {
     const resources = getResources();
     const lowerType = type.toLowerCase();
-    
+
     if (lowerType in resources && resources[lowerType] >= quantity) {
         resources[lowerType] -= parseInt(quantity);
         localStorage.setItem('resources', JSON.stringify(resources));
@@ -139,27 +141,27 @@ function saveRequest(request) {
     request.id = Date.now();
     request.status = 'pending';
     request.createdAt = new Date().toISOString();
-    
+
     requests.push(request);
     localStorage.setItem('requests', JSON.stringify(requests));
-    
+
     // For high priority requests, add to activity feed
     if (request.priority === 'High') {
         addActivity(`New high priority request: ${request.resourceType} for ${request.campName}`, 'resource', request);
     }
-    
+
     return request;
 }
 
 function fulfillRequest(requestId) {
     const requests = getRequests();
     const request = requests.find(req => req.id == requestId);
-    
+
     if (request) {
         request.status = 'fulfilled';
         request.fulfilledAt = new Date().toISOString();
         localStorage.setItem('requests', JSON.stringify(requests));
-        
+
         addActivity(`Request fulfilled: ${request.resourceType} for ${request.campName}`, 'resource', request);
         return true;
     }
@@ -175,19 +177,19 @@ function saveDonation(donation) {
     const donations = getDonations();
     donation.id = Date.now();
     donation.createdAt = new Date().toISOString();
-    
+
     donations.push(donation);
     localStorage.setItem('donations', JSON.stringify(donations));
-    
+
     // Add resources
     addResource(donation.resourceType, donation.quantity);
-    
+
     // Add to activity feed
     addActivity(`New donation: ${donation.quantity} ${donation.resourceType} items for ${donation.campName}`, 'resource', donation);
-    
+
     // Check if this donation can fulfill any high priority requests
     checkAndFulfillRequests(donation.resourceType, donation.campName);
-    
+
     return donation;
 }
 
@@ -199,11 +201,11 @@ function checkAndFulfillRequests(resourceType, campName) {
         req.resourceType === resourceType &&
         req.campName === campName
     );
-    
+
     if (pendingHighPriority.length > 0) {
         // Sort by oldest first
         pendingHighPriority.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-        
+
         // Fulfill the oldest request
         fulfillRequest(pendingHighPriority[0].id);
     }
@@ -220,20 +222,20 @@ function saveAlert(alert) {
     alert.id = Date.now();
     alert.createdAt = new Date().toISOString();
     alert.active = true;
-    
+
     alerts.push(alert);
     localStorage.setItem('alerts', JSON.stringify(alerts));
-    
+
     // Add to activity feed
     addActivity(`New emergency alert: ${alert.title} (${alert.type})`, 'alert', alert);
-    
+
     return alert;
 }
 
 function deleteAlert(alertId) {
     const alerts = getAlerts();
     const alertIndex = alerts.findIndex(alert => alert.id == alertId);
-    
+
     if (alertIndex !== -1) {
         const alertTitle = alerts[alertIndex].title;
         alerts.splice(alertIndex, 1);
@@ -275,7 +277,7 @@ function initializeApp() {
             }
         ];
         localStorage.setItem('camps', JSON.stringify(sampleCamps));
-        
+
         // Sample resources
         const sampleResources = {
             food: 1200,
@@ -284,14 +286,14 @@ function initializeApp() {
             medicine: 800
         };
         localStorage.setItem('resources', JSON.stringify(sampleResources));
-        
+
         // Sample users
         const sampleUsers = [
             { username: "admin", password: "admin123" },
             { username: "manager", password: "manager123" }
         ];
         localStorage.setItem('users', JSON.stringify(sampleUsers));
-        
+
         // Sample requests
         const sampleRequests = [
             {
@@ -320,7 +322,7 @@ function initializeApp() {
             }
         ];
         localStorage.setItem('requests', JSON.stringify(sampleRequests));
-        
+
         // Sample alerts
         const sampleAlerts = [
             {
@@ -335,7 +337,7 @@ function initializeApp() {
             }
         ];
         localStorage.setItem('alerts', JSON.stringify(sampleAlerts));
-        
+
         // Sample activities
         const sampleActivities = [
             {
@@ -358,7 +360,7 @@ function initializeApp() {
             }
         ];
         localStorage.setItem('activities', JSON.stringify(sampleActivities));
-        
+
         // Mark as initialized
         localStorage.setItem('appInitialized', 'true');
     }
@@ -368,3 +370,52 @@ function initializeApp() {
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
 });
+
+
+// Dark mode functions
+function initDarkMode() {
+    const darkModeToggle = document.getElementById('darkModeToggle');
+
+    // Check for saved theme preference or prefer-color-scheme
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    // Set initial state
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.body.classList.add('dark-mode');
+        darkModeToggle.checked = true;
+        updateDarkModeIcons(true);
+    }
+
+    // Add event listener for toggle
+    darkModeToggle.addEventListener('change', function() {
+        toggleDarkMode(this.checked);
+    });
+}
+
+function toggleDarkMode(isDark) {
+    if (isDark) {
+        document.body.classList.add('dark-mode');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.body.classList.remove('dark-mode');
+        localStorage.setItem('theme', 'light');
+    }
+
+    updateDarkModeIcons(isDark);
+}
+
+function updateDarkModeIcons(isDark) {
+    const iconElement = document.querySelector('label[for="darkModeToggle"] i');
+    if (iconElement) {
+        iconElement.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+    }
+}
+// Placeholder for navigation functionality.  This needs further implementation details.
+function getDirectionsToCamp(campLocation) {
+    // Implement navigation logic here using a mapping API or redirection to Google Maps.
+    console.log("Get directions to:", campLocation);
+    // Example using Google Maps:
+    // window.open(`https://www.google.com/maps/dir/?api=1&destination=${campLocation.lat},${campLocation.lng}`, '_blank');
+
+}
