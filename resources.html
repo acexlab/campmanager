@@ -1,0 +1,245 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resources - Camp Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-campground me-2"></i>Camp Manager
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="camps.html">Nearby Camps</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="resources.html">Resources</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="alerts.html">Emergency Alerts</a>
+                    </li>
+                    <li class="nav-item" id="loginNavItem">
+                        <a class="nav-link" href="login.html">Login</a>
+                    </li>
+                    <li class="nav-item d-none" id="logoutNavItem">
+                        <a class="nav-link" href="#" id="logoutLink">Logout</a>
+                    </li>
+                </ul>
+                <span class="navbar-text ms-3 d-none" id="userWelcome">
+                    Welcome, <span id="username"></span>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container my-4">
+        <h1 class="mb-4">Resources Management</h1>
+        
+        <ul class="nav nav-tabs mb-4" id="resourceTabs">
+            <li class="nav-item">
+                <a class="nav-link active" id="request-tab" data-bs-toggle="tab" href="#request">Request Resources</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="donate-tab" data-bs-toggle="tab" href="#donate">Donate Resources</a>
+            </li>
+        </ul>
+        
+        <div class="tab-content">
+            <!-- Request Resources Tab -->
+            <div class="tab-pane fade show active" id="request">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Request Resources</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="requestForm">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="requestName" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="requestName" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="requestContact" class="form-label">Contact Number</label>
+                                    <input type="tel" class="form-control" id="requestContact" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="requestResourceType" class="form-label">Resource Type</label>
+                                    <select class="form-select" id="requestResourceType" required>
+                                        <option value="" selected disabled>Select resource type</option>
+                                        <option value="Food">Food</option>
+                                        <option value="Shelter">Shelter</option>
+                                        <option value="Clothes">Clothes</option>
+                                        <option value="Medicine">Medicine</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="requestQuantity" class="form-label">Quantity</label>
+                                    <input type="number" class="form-control" id="requestQuantity" min="1" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="requestPriority" class="form-label">Priority</label>
+                                    <select class="form-select" id="requestPriority" required>
+                                        <option value="Low">Low</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="High">High</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="requestCamp" class="form-label">Target Camp</label>
+                                    <select class="form-select" id="requestCamp" required>
+                                        <option value="" selected disabled>Select a camp</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="directDelivery">
+                                <label class="form-check-label" for="directDelivery">Direct delivery to Camp</label>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Submit Request</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Donate Resources Tab -->
+            <div class="tab-pane fade" id="donate">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Donate Resources</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="donateForm">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="donateName" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="donateName" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="donateContact" class="form-label">Contact Number</label>
+                                    <input type="tel" class="form-control" id="donateContact" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="donateResourceType" class="form-label">Resource Type</label>
+                                    <select class="form-select" id="donateResourceType" required>
+                                        <option value="" selected disabled>Select resource type</option>
+                                        <option value="Food">Food</option>
+                                        <option value="Shelter">Shelter</option>
+                                        <option value="Clothes">Clothes</option>
+                                        <option value="Medicine">Medicine</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="donateQuantity" class="form-label">Quantity</label>
+                                    <input type="number" class="form-control" id="donateQuantity" min="1" required>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="donateCamp" class="form-label">Target Camp</label>
+                                <select class="form-select" id="donateCamp" required>
+                                    <option value="" selected disabled>Select a camp</option>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-success">Submit Donation</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- High Priority Requests List -->
+        <div class="card mt-4">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">High Priority Resource Requests</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Camp</th>
+                                <th>Resource Type</th>
+                                <th>Quantity</th>
+                                <th>Requested By</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="highPriorityList">
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">No high priority requests</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Camp Manager</h5>
+                    <p>A disaster relief resource management system designed to coordinate relief efforts efficiently during emergencies.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Emergency Contacts</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-phone-alt me-2"></i>Emergency Hotline: 1-800-DISASTER</li>
+                        <li><i class="fas fa-ambulance me-2"></i>Medical Emergency: 911</li>
+                        <li><i class="fas fa-hands-helping me-2"></i>Volunteer Support: 1-888-HELP-NOW</li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">About Us</a></li>
+                        <li><a href="#" class="text-white">Privacy Policy</a></li>
+                        <li><a href="#" class="text-white">Terms of Service</a></li>
+                        <li><a href="#" class="text-white">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p>&copy; 2023 Camp Manager. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+    <script src="js/resources.js"></script>
+</body>
+</html>
