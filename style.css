@@ -344,6 +344,47 @@ body {
   border-left-color: #DC3545;
 }
 
+/* User location styles */
+.user-location-marker {
+  background: transparent;
+}
+
+.user-location-dot {
+  color: #007BFF;
+  font-size: 22px;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  animation: pulse 2s infinite;
+  position: relative;
+}
+
+.user-location-dot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  background-color: #007BFF;
+  border-radius: 50%;
+  z-index: -1;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 .alert-list-item.hurricane {
   border-left-color: #FD7E14;
 }

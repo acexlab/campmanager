@@ -1,4 +1,3 @@
-
 // Alerts page functionality
 
 let alertMap;
@@ -6,42 +5,48 @@ let alertMarkers = [];
 let alertCircles = [];
 let alertSelectedLocation = null;
 let alertUserMarker;
+// Variables to store user location elements for alerts map
+let alertUserLocationMarker = null;
+let alertUserLocationCircle = null;
 
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize the map
     initAlertMap();
-    
+
     // Load alerts
     loadAlerts();
-    
+
     // Show admin controls if logged in
     if (checkLoggedIn()) {
         document.getElementById('addAlertCard').classList.remove('d-none');
     }
-    
+
     // Set up event listeners
     setupAlertEventListeners();
-    
+
     // Refresh alerts every 30 seconds
     setInterval(loadAlerts, 30000);
+
+    // Show user's location on map load
+    showUserCurrentLocationOnAlertMap();
 });
 
 function initAlertMap() {
     // Create a map centered on default location (will be updated)
     alertMap = L.map('alertMap').setView([34.0522, -118.2437], 10);
-    
+
     // Add the tile layer (OpenStreetMap)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(alertMap);
-    
+
     // Add click handler for map when logged in
     if (checkLoggedIn()) {
         alertMap.on('click', function(e) {
             alertSelectedLocation = e.latlng;
             document.getElementById('alertLat').value = alertSelectedLocation.lat.toFixed(6);
             document.getElementById('alertLng').value = alertSelectedLocation.lng.toFixed(6);
-            
+
             // Update radius visualization
             updateAlertRadiusPreview();
         });
@@ -53,12 +58,12 @@ function updateAlertRadiusPreview() {
     if (alertUserMarker) {
         alertMap.removeLayer(alertUserMarker);
     }
-    
+
     if (!alertSelectedLocation) return;
-    
+
     // Get radius value
     const radius = parseInt(document.getElementById('alertRadius').value) * 1000; // Convert to meters
-    
+
     // Create preview circle
     alertUserMarker = L.circle(alertSelectedLocation, {
         color: '#ff9800',
@@ -71,29 +76,29 @@ function updateAlertRadiusPreview() {
 function loadAlerts() {
     const alerts = getAlerts();
     const alertsList = document.getElementById('alertsList');
-    
+
     // Clear existing markers and circles
     alertMarkers.forEach(marker => alertMap.removeLayer(marker));
     alertCircles.forEach(circle => alertMap.removeLayer(circle));
     alertMarkers = [];
     alertCircles = [];
-    
+
     // Clear alerts list
     alertsList.innerHTML = '';
-    
+
     if (alerts.length === 0) {
         alertsList.innerHTML = '<li class="list-group-item text-center text-muted">No active alerts</li>';
         return;
     }
-    
+
     // Filter for active alerts
     const activeAlerts = alerts.filter(alert => alert.active);
-    
+
     if (activeAlerts.length === 0) {
         alertsList.innerHTML = '<li class="list-group-item text-center text-muted">No active alerts</li>';
         return;
     }
-    
+
     // Add active alerts to map and list
     activeAlerts.forEach(alert => {
         // Add to map
@@ -106,16 +111,16 @@ function loadAlerts() {
                 iconAnchor: [12, 12]
             })
         }).addTo(alertMap);
-        
+
         marker.bindPopup(`
             <strong>${alert.title}</strong><br>
             Type: ${alert.type}<br>
             <p>${alert.description}</p>
             <small>Posted: ${formatDate(alert.createdAt)}</small>
         `);
-        
+
         alertMarkers.push(marker);
-        
+
         // Add circle for affected area
         const circle = L.circle([alert.location.lat, alert.location.lng], {
             color: 'red',
@@ -123,13 +128,13 @@ function loadAlerts() {
             fillOpacity: 0.2,
             radius: alert.radius * 1000 // Convert to meters
         }).addTo(alertMap);
-        
+
         alertCircles.push(circle);
-        
+
         // Add to list
         const alertItem = document.createElement('li');
         alertItem.className = `list-group-item alert-list-item ${alert.type.toLowerCase()}`;
-        
+
         alertItem.innerHTML = `
             <div class="d-flex justify-content-between align-items-center">
                 <div>
@@ -139,7 +144,7 @@ function loadAlerts() {
                 </div>
             </div>
         `;
-        
+
         // Add delete button if logged in
         if (checkLoggedIn()) {
             const deleteBtn = document.createElement('button');
@@ -150,10 +155,10 @@ function loadAlerts() {
                 e.stopPropagation();
                 deleteAlertById(alert.id);
             });
-            
+
             alertItem.querySelector('.d-flex').appendChild(deleteBtn);
         }
-        
+
         alertItem.addEventListener('click', function() {
             // Center map on alert location and open popup
             alertMap.setView([alert.location.lat, alert.location.lng], 12);
@@ -164,15 +169,16 @@ function loadAlerts() {
                 }
             });
         });
-        
+
         alertsList.appendChild(alertItem);
     });
-    
+
     // Fit map to show all alerts
     if (alertMarkers.length > 0) {
         const group = L.featureGroup([...alertMarkers, ...alertCircles]);
         alertMap.fitBounds(group.getBounds().pad(0.1));
     }
+    showUserCurrentLocationOnAlertMap(); //Added to show user location after loading alerts.
 }
 
 function setupAlertEventListeners() {
@@ -181,23 +187,23 @@ function setupAlertEventListeners() {
     if (alertRadius) {
         alertRadius.addEventListener('input', updateAlertRadiusPreview);
     }
-    
+
     // Add alert form submission
     const addAlertForm = document.getElementById('addAlertForm');
     if (addAlertForm) {
         addAlertForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             if (!alertSelectedLocation) {
                 alert('Please select a location on the map.');
                 return;
             }
-            
+
             const alertTitle = document.getElementById('alertTitle').value;
             const alertType = document.getElementById('alertType').value;
             const alertDescription = document.getElementById('alertDescription').value;
             const alertRadius = document.getElementById('alertRadius').value;
-            
+
             const newAlert = {
                 title: alertTitle,
                 type: alertType,
@@ -208,9 +214,9 @@ function setupAlertEventListeners() {
                 },
                 radius: parseInt(alertRadius)
             };
-            
+
             saveAlert(newAlert);
-            
+
             // Reset form
             addAlertForm.reset();
             if (alertUserMarker) {
@@ -218,10 +224,10 @@ function setupAlertEventListeners() {
                 alertUserMarker = null;
             }
             alertSelectedLocation = null;
-            
+
             // Reload alerts
             loadAlerts();
-            
+
             alert('Emergency alert added successfully!');
         });
     }
@@ -235,4 +241,66 @@ function deleteAlertById(alertId) {
             alert('Error dismissing alert.');
         }
     }
+}
+
+
+function showUserCurrentLocationOnAlertMap() {
+    // Remove existing user location elements if they exist
+    if (alertUserLocationMarker) {
+        alertMap.removeLayer(alertUserLocationMarker);
+        alertUserLocationMarker = null;
+    }
+    if (alertUserLocationCircle) {
+        alertMap.removeLayer(alertUserLocationCircle);
+        alertUserLocationCircle = null;
+    }
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            // Create a custom marker for user location
+            alertUserLocationMarker = L.marker([lat, lng], {
+                icon: L.divIcon({
+                    className: 'user-location-marker',
+                    html: '<div class="user-location-dot"><i class="fas fa-map-marker-alt"></i></div>',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 30]
+                }),
+                zIndexOffset: 1000
+            }).addTo(alertMap);
+
+            // Add a circle to indicate accuracy range
+            alertUserLocationCircle = L.circle([lat, lng], {
+                radius: position.coords.accuracy,
+                color: '#007BFF',
+                fillColor: '#007BFF',
+                fillOpacity: 0.2
+            }).addTo(alertMap);
+        });
+    }
+}
+
+// Placeholder functions -  replace with your actual implementations
+function checkLoggedIn() {
+    return true; // Replace with actual login check
+}
+
+function getAlerts() {
+    return []; // Replace with your alert data fetching logic
+}
+
+function saveAlert(newAlert) {
+    // Replace with your alert saving logic
+}
+
+function deleteAlert(alertId) {
+    // Replace with your alert deletion logic
+    return true;
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleString();
 }
