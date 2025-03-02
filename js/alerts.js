@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set up event listeners
     setupAlertEventListeners();
     
+    // Show user's current location
+    showUserCurrentLocationOnAlertMap();
+    
     // Refresh alerts every 30 seconds
     setInterval(loadAlerts, 30000);
 });
@@ -234,5 +237,42 @@ function deleteAlertById(alertId) {
         } else {
             alert('Error dismissing alert.');
         }
+    }
+}
+function showUserCurrentLocationOnAlertMap() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            
+            // Create a custom marker for user location
+            const userLocationMarker = L.marker([lat, lng], {
+                icon: L.divIcon({
+                    className: 'user-location-marker',
+                    html: '<div class="user-location-dot"><i class="fas fa-map-marker-alt"></i></div>',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 30]
+                })
+            }).addTo(alertMap);
+            
+            // Add a circle to indicate accuracy range
+            const accuracyCircle = L.circle([lat, lng], {
+                radius: position.coords.accuracy,
+                color: '#007BFF',
+                fillColor: '#007BFF',
+                fillOpacity: 0.1,
+                weight: 1
+            }).addTo(alertMap);
+            
+            // Add a popup to the marker
+            userLocationMarker.bindPopup("<strong>You are here</strong><br>Your current location").openPopup();
+            
+            // Zoom to the user's location if no other markers
+            if (alertMarkers.length === 0 && alertCircles.length === 0) {
+                alertMap.setView([lat, lng], 14);
+            }
+        }, function(error) {
+            console.log('Error getting user location:', error.message);
+        });
     }
 }
