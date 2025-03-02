@@ -20,9 +20,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Set up event listeners
     setupEventListeners();
-    
-    // Show user's current location
-    showUserCurrentLocation();
 });
 
 function initMap() {
@@ -234,57 +231,5 @@ function deleteCampById(campId) {
         } else {
             alert('Error deleting camp.');
         }
-    }
-}
-// Variables to store user location elements
-let userLocationMarker = null;
-let userLocationCircle = null;
-
-function showUserCurrentLocation() {
-    // Remove existing user location elements if they exist
-    if (userLocationMarker) {
-        map.removeLayer(userLocationMarker);
-        userLocationMarker = null;
-    }
-    if (userLocationCircle) {
-        map.removeLayer(userLocationCircle);
-        userLocationCircle = null;
-    }
-    
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-            
-            // Create a custom marker for user location
-            userLocationMarker = L.marker([lat, lng], {
-                icon: L.divIcon({
-                    className: 'user-location-marker',
-                    html: '<div class="user-location-dot"><i class="fas fa-map-marker-alt"></i></div>',
-                    iconSize: [30, 30],
-                    iconAnchor: [15, 30]
-                }),
-                zIndexOffset: 1000
-            }).addTo(map);
-            
-            // Add a circle to indicate accuracy range
-            userLocationCircle = L.circle([lat, lng], {
-                radius: position.coords.accuracy,
-                color: '#007BFF',
-                fillColor: '#007BFF',
-                fillOpacity: 0.1,
-                weight: 1
-            }).addTo(map);
-            
-            // Add a popup to the marker
-            userLocationMarker.bindPopup("<strong>You are here</strong><br>Your current location").openPopup();
-            
-            // Zoom to the user's location if no other markers
-            if (markers.length === 0) {
-                map.setView([lat, lng], 14);
-            }
-        }, function(error) {
-            console.log('Error getting user location:', error.message);
-        });
     }
 }
