@@ -239,14 +239,28 @@ function deleteAlertById(alertId) {
         }
     }
 }
+// Variables to store user location elements for alerts map
+let alertUserLocationMarker = null;
+let alertUserLocationCircle = null;
+
 function showUserCurrentLocationOnAlertMap() {
+    // Remove existing user location elements if they exist
+    if (alertUserLocationMarker) {
+        alertMap.removeLayer(alertUserLocationMarker);
+        alertUserLocationMarker = null;
+    }
+    if (alertUserLocationCircle) {
+        alertMap.removeLayer(alertUserLocationCircle);
+        alertUserLocationCircle = null;
+    }
+    
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
             
             // Create a custom marker for user location
-            const userLocationMarker = L.marker([lat, lng], {
+            alertUserLocationMarker = L.marker([lat, lng], {
                 icon: L.divIcon({
                     className: 'user-location-marker',
                     html: '<div class="user-location-dot"><i class="fas fa-map-marker-alt"></i></div>',
@@ -257,7 +271,7 @@ function showUserCurrentLocationOnAlertMap() {
             }).addTo(alertMap);
             
             // Add a circle to indicate accuracy range
-            const accuracyCircle = L.circle([lat, lng], {
+            alertUserLocationCircle = L.circle([lat, lng], {
                 radius: position.coords.accuracy,
                 color: '#007BFF',
                 fillColor: '#007BFF',

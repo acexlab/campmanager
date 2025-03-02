@@ -236,14 +236,28 @@ function deleteCampById(campId) {
         }
     }
 }
+// Variables to store user location elements
+let userLocationMarker = null;
+let userLocationCircle = null;
+
 function showUserCurrentLocation() {
+    // Remove existing user location elements if they exist
+    if (userLocationMarker) {
+        map.removeLayer(userLocationMarker);
+        userLocationMarker = null;
+    }
+    if (userLocationCircle) {
+        map.removeLayer(userLocationCircle);
+        userLocationCircle = null;
+    }
+    
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
             
             // Create a custom marker for user location
-            const userLocationMarker = L.marker([lat, lng], {
+            userLocationMarker = L.marker([lat, lng], {
                 icon: L.divIcon({
                     className: 'user-location-marker',
                     html: '<div class="user-location-dot"><i class="fas fa-map-marker-alt"></i></div>',
@@ -254,7 +268,7 @@ function showUserCurrentLocation() {
             }).addTo(map);
             
             // Add a circle to indicate accuracy range
-            const accuracyCircle = L.circle([lat, lng], {
+            userLocationCircle = L.circle([lat, lng], {
                 radius: position.coords.accuracy,
                 color: '#007BFF',
                 fillColor: '#007BFF',
