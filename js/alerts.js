@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize the map
     initAlertMap();
 
+    // Show user location initially
+    showUserCurrentLocationOnAlertMap();
+
     // Load alerts
     loadAlerts();
 
@@ -27,8 +30,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Refresh alerts every 30 seconds
     setInterval(loadAlerts, 30000);
 
-    // Show user location initially
-    showUserCurrentLocationOnAlertMap();
+    // Refresh user location every minute
+    setInterval(showUserCurrentLocationOnAlertMap, 60000);
 });
 
 function initAlertMap() {
@@ -278,6 +281,25 @@ function showUserCurrentLocationOnAlertMap() {
                 fillColor: '#007BFF',
                 fillOpacity: 0.2
             }).addTo(alertMap);
+            
+            // Add a popup to the marker
+            alertUserLocationMarker.bindPopup("Your current location").openPopup();
+            
+        }, function(error) {
+            console.error('Error getting location:', error.message);
+            
+            // Show an error message to the user
+            if (error.code === 1) {
+                alert('Please allow location access to see your position on the map.');
+            } else if (error.code === 2 || error.code === 3) {
+                alert('Could not determine your location. Please try again later.');
+            }
+        }, {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
         });
+    } else {
+        alert('Geolocation is not supported by this browser.');
     }
 }
