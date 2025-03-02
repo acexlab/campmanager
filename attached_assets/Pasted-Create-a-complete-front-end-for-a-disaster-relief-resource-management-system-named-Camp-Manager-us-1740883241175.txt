@@ -1,0 +1,76 @@
+Create a complete front-end for a disaster relief resource management system named “Camp Manager” using HTML, CSS, and JavaScript with a modular structure. Each page must have its own separate JavaScript file for easy maintenance. Use local storage, arrays, or lists to handle dynamic data such as camps, resources, and alerts (no external database).
+
+Project Requirements:
+
+General Layout:
+	•	A top navigation bar on all pages with links to:
+	•	Home (Main Dashboard)
+	•	Nearby Camp Page
+	•	Resources Page
+	•	Emergency Alerts Page
+	•	Login
+	•	The Camp Manager logo at the top-left corner must redirect to the Home (Main Dashboard) page.
+	•	Footer with contact information, helpline numbers, and basic support links (standard website footer style).
+
+Pages and Their Features:
+
+1. Home Page (Main Dashboard):
+	•	Display a live dashboard showing:
+	•	Total number of Camps.
+	•	Total number of resources, categorized into:
+	•	Food
+	•	Shelter
+	•	Clothes
+	•	Medicine
+	•	Recent Activity Feed, updating live when:
+	•	A resource is requested (show icon + message).
+	•	A Camp is added (show icon + message).
+	•	A Camp is deleted (show icon + message).
+	•	An emergency alert is created (show icon + message).
+	•	Design the activity feed attractively with relevant icons and styles.
+
+2. Nearby Camp Page:
+	•	Use Leaflet API to display a map.
+	•	Automatically detect and show the user’s current location.
+	•	Display nearby Camps on the map, marked with colored icons or circles (e.g., blue circles).
+	•	Camp data should be stored in an array or local storage.
+	•	Logged-in users can add or delete Camps.
+	•	Camps must dynamically update on the map and be selectable from other forms across the site.
+
+3. Resources Page (Donate & Request):
+	•	Split into two forms:
+	•	Request Resource Form:
+	•	Fields: Name, Contact Number, Resource Type, Quantity, Priority (High, Medium, Low), Target Camp (dropdown from stored Camps).
+	•	Checkbox for “Direct delivery to Camp.”
+	•	Donate Resource Form:
+	•	Fields: Name, Contact Number, Resource Type, Quantity, Target Camp (dropdown).
+	•	Show a High-Priority Requests List at the bottom to help donors see urgent needs.
+	•	When a high-priority request is fulfilled, remove it from the list.
+	•	Store all data (requests, donations) in arrays or local storage for dynamic updates.
+
+4. Emergency Alerts Page:
+	•	Display active emergency alerts (floods, earthquakes, etc.).
+	•	Use Leaflet API to highlight affected areas on the map.
+	•	Show alerts as red markers or areas on the map.
+	•	Logged-in users can add or delete alerts.
+	•	Regular users can only view active alerts.
+
+5. Login System:
+	•	Use a predefined username and password list (array) for login (no backend or database).
+	•	After login:
+	•	Display admin controls on the Camp and Alert pages.
+	•	Logged-in users can:
+	•	Add/Delete Camps.
+	•	Add/Delete Alerts.
+	•	Show the logged-in user’s name on all pages during the session.
+
+Development Notes:
+	•	Use separate JavaScript files for modularity:
+	•	dashboard.js
+	•	camps.js
+	•	resources.js
+	•	alerts.js
+	•	login.js
+	•	Use clean, semantic HTML, responsive CSS (consider Bootstrap or Tailwind).
+	•	Keep all dynamic data (Camps, resources, requests, alerts) in arrays or local storage to enable real-time updates.
+	•	Ensure smooth navigation between pages with active highlighting in the navbar.
