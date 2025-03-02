@@ -181,7 +181,7 @@ function loadAlerts() {
         const group = L.featureGroup([...alertMarkers, ...alertCircles]);
         alertMap.fitBounds(group.getBounds().pad(0.1));
     }
-    showUserCurrentLocationOnAlertMap(); //Added to refresh location after loading alerts.
+    // Don't call showUserCurrentLocationOnAlertMap() here to avoid duplicating the marker
 }
 
 function setupAlertEventListeners() {
