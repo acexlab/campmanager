@@ -1,12 +1,13 @@
+
 // Dashboard page functionality
 
 document.addEventListener('DOMContentLoaded', function() {
     // Update dashboard stats
     updateDashboardStats();
-
+    
     // Load activity feed
     loadActivityFeed();
-
+    
     // Set up clear activity button
     const clearActivityBtn = document.getElementById('clearActivityBtn');
     if (clearActivityBtn) {
@@ -17,20 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-
-    // Setup refresh dashboard button
-    const refreshBtn = document.getElementById('refreshDashboard');
-    if (refreshBtn) {
-        refreshBtn.addEventListener('click', function() {
-            updateDashboardStats();
-            loadActivityFeed();
-            updateLastUpdated();
-        });
-    }
-
-    // Set initial last updated time
-    updateLastUpdated();
-
+    
     // Refresh dashboard every 30 seconds
     setInterval(updateDashboardStats, 30000);
     setInterval(loadActivityFeed, 30000);
@@ -40,7 +28,7 @@ function updateDashboardStats() {
     // Update camp count
     const camps = getCamps();
     document.getElementById('totalCamps').textContent = camps.length;
-
+    
     // Update resource counts
     const resources = getResources();
     document.getElementById('foodCount').textContent = resources.food || 0;
@@ -52,21 +40,21 @@ function updateDashboardStats() {
 function loadActivityFeed() {
     const activities = getActivities();
     const activityFeed = document.getElementById('activityFeed');
-
+    
     if (activities.length === 0) {
         activityFeed.innerHTML = '<li class="list-group-item text-center text-muted">No recent activities</li>';
         return;
     }
-
+    
     activityFeed.innerHTML = '';
-
+    
     activities.forEach(activity => {
         const activityItem = document.createElement('li');
         activityItem.className = 'list-group-item activity-item';
-
+        
         let iconClass = 'fas fa-info-circle';
         let iconBgClass = 'bg-info';
-
+        
         switch (activity.type) {
             case 'resource':
                 iconClass = 'fas fa-box';
@@ -85,7 +73,7 @@ function loadActivityFeed() {
                 iconBgClass = 'bg-secondary';
                 break;
         }
-
+        
         // Format timestamp as relative time
         const timestamp = new Date(activity.timestamp);
         const now = new Date();
@@ -94,7 +82,7 @@ function loadActivityFeed() {
         const diffMin = Math.floor(diffSec / 60);
         const diffHour = Math.floor(diffMin / 60);
         const diffDay = Math.floor(diffHour / 24);
-
+        
         let timeStr;
         if (diffDay > 0) {
             timeStr = diffDay + (diffDay === 1 ? ' day ago' : ' days ago');
@@ -105,7 +93,7 @@ function loadActivityFeed() {
         } else {
             timeStr = 'just now';
         }
-
+        
         activityItem.innerHTML = `
             <div class="activity-icon ${iconBgClass}">
                 <i class="${iconClass}"></i>
@@ -115,22 +103,7 @@ function loadActivityFeed() {
                 <div class="activity-time">${timeStr}</div>
             </div>
         `;
-
+        
         activityFeed.appendChild(activityItem);
     });
 }
-
-// Update the "last updated" time
-function updateLastUpdated() {
-    const lastUpdatedEl = document.getElementById('lastUpdated');
-    if (lastUpdatedEl) {
-        const now = new Date();
-        const timeStr = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-        lastUpdatedEl.textContent = timeStr;
-    }
-}
-
-// Placeholder functions -  Replace with your actual implementations
-function getCamps() { return []; }
-function getResources() { return {}; }
-function getActivities() { return []; }
