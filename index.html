@@ -24,22 +24,34 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="index.html">Dashboard</a>
+                        <a class="nav-link active" href="index.html">
+                            <i class="fas fa-home me-1"></i> Dashboard
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="camps.html">Nearby Camps</a>
+                        <a class="nav-link" href="camps.html">
+                            <i class="fas fa-map-marked-alt me-1"></i> Nearby Camps
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="resources.html">Resources</a>
+                        <a class="nav-link" href="resources.html">
+                            <i class="fas fa-box-open me-1"></i> Resources
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="alerts.html">Emergency Alerts</a>
+                        <a class="nav-link" href="alerts.html">
+                            <i class="fas fa-exclamation-triangle me-1"></i> Emergency Alerts
+                        </a>
                     </li>
                     <li class="nav-item" id="loginNavItem">
-                        <a class="nav-link" href="login.html">Login</a>
+                        <a class="nav-link" href="login.html">
+                            <i class="fas fa-sign-in-alt me-1"></i> Login
+                        </a>
                     </li>
                     <li class="nav-item d-none" id="logoutNavItem">
-                        <a class="nav-link" href="#" id="logoutLink">Logout</a>
+                        <a class="nav-link" href="#" id="logoutLink">
+                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                        </a>
                     </li>
                 </ul>
                 <span class="navbar-text ms-3 d-none" id="userWelcome">
@@ -50,13 +62,17 @@
     </nav>
 
     <!-- Hero Banner -->
-    <div class="hero-banner text-center py-5 bg-primary text-white">
+    <div class="hero-banner text-center">
         <div class="container">
-            <h1 class="display-4 mb-4">Disaster Relief Resource Management</h1>
-            <p class="lead mb-5">Coordinating relief efforts efficiently during emergencies</p>
+            <h1 class="display-4">Disaster Relief Resource Management</h1>
+            <p class="lead">Coordinating relief efforts efficiently during emergencies</p>
             <div class="d-flex justify-content-center gap-3">
-                <a href="camps.html" class="btn btn-light btn-lg">Find Nearby Camps</a>
-                <a href="resources.html" class="btn btn-warning btn-lg">Donate Resources</a>
+                <a href="camps.html" class="btn btn-light btn-lg">
+                    <i class="fas fa-map-marker-alt me-2"></i>Find Nearby Camps
+                </a>
+                <a href="resources.html" class="btn btn-warning btn-lg">
+                    <i class="fas fa-hands-helping me-2"></i>Donate Resources
+                </a>
             </div>
         </div>
     </div>
@@ -68,8 +84,11 @@
         <!-- Dashboard Stats -->
         <div class="row mb-4">
             <div class="col-md-3">
-                <div class="card text-center border-primary h-100">
+                <div class="card text-center h-100">
                     <div class="card-body">
+                        <div class="mb-3">
+                            <i class="fas fa-campground fa-3x text-primary"></i>
+                        </div>
                         <h5 class="card-title">Total Camps</h5>
                         <p class="card-text display-4" id="totalCamps">0</p>
                     </div>
@@ -77,25 +96,37 @@
             </div>
             
             <div class="col-md-9">
-                <div class="card border-success h-100">
+                <div class="card h-100">
                     <div class="card-header bg-success text-white">
-                        <h5 class="mb-0">Resource Distribution</h5>
+                        <h5 class="mb-0"><i class="fas fa-boxes me-2"></i>Resource Distribution</h5>
                     </div>
                     <div class="card-body">
                         <div class="row text-center">
                             <div class="col">
+                                <div class="mb-2">
+                                    <i class="fas fa-utensils fa-2x text-primary"></i>
+                                </div>
                                 <h6>Food</h6>
                                 <p class="display-6" id="foodCount">0</p>
                             </div>
                             <div class="col">
+                                <div class="mb-2">
+                                    <i class="fas fa-home fa-2x text-success"></i>
+                                </div>
                                 <h6>Shelter</h6>
                                 <p class="display-6" id="shelterCount">0</p>
                             </div>
                             <div class="col">
+                                <div class="mb-2">
+                                    <i class="fas fa-tshirt fa-2x text-warning"></i>
+                                </div>
                                 <h6>Clothes</h6>
                                 <p class="display-6" id="clothesCount">0</p>
                             </div>
                             <div class="col">
+                                <div class="mb-2">
+                                    <i class="fas fa-first-aid fa-2x text-danger"></i>
+                                </div>
                                 <h6>Medicine</h6>
                                 <p class="display-6" id="medicineCount">0</p>
                             </div>
@@ -108,10 +139,12 @@
         <!-- Activity Feed -->
         <div class="row">
             <div class="col-md-12">
-                <div class="card border-info">
-                    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Recent Activity Feed</h5>
-                        <button class="btn btn-sm btn-outline-light" id="clearActivityBtn">Clear</button>
+                <div class="card">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-history me-2"></i>Recent Activity Feed</h5>
+                        <button class="btn btn-sm btn-outline-light" id="clearActivityBtn">
+                            <i class="fas fa-broom me-1"></i>Clear
+                        </button>
                     </div>
                     <div class="card-body">
                         <ul class="list-group" id="activityFeed">
