@@ -1,51 +1,48 @@
+
 // Camps page functionality
 
 let map;
 let markers = [];
 let userMarker;
 let selectedLocation = null;
-// Variables to store user location elements
-let userLocationMarker = null;
-let userLocationCircle = null;
 
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize the map
     initMap();
-
+    
     // Load camps into list and map
     loadCamps();
-
+    
     // Show admin controls if logged in
     if (checkLoggedIn()) {
         document.getElementById('addCampCard').classList.remove('d-none');
     }
-
+    
     // Set up event listeners
     setupEventListeners();
-    showUserCurrentLocation(); // Added to show location on load
 });
 
 function initMap() {
     // Create a map centered on default location (will be updated)
     map = L.map('map').setView([34.0522, -118.2437], 10);
-
+    
     // Add the tile layer (OpenStreetMap)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
-
+    
     // Add click handler for map when logged in
     if (checkLoggedIn()) {
         map.on('click', function(e) {
             selectedLocation = e.latlng;
             document.getElementById('campLat').value = selectedLocation.lat.toFixed(6);
             document.getElementById('campLng').value = selectedLocation.lng.toFixed(6);
-
+            
             // Show a temporary marker
             if (userMarker) {
                 map.removeLayer(userMarker);
             }
-
+            
             userMarker = L.marker(selectedLocation, {
                 icon: L.divIcon({
                     className: 'selected-location-marker',
@@ -61,45 +58,45 @@ function initMap() {
 function loadCamps() {
     const camps = getCamps();
     const campList = document.getElementById('campList');
-
+    
     // Clear existing markers
     markers.forEach(marker => map.removeLayer(marker));
     markers = [];
-
+    
     // Clear camp list
     campList.innerHTML = '';
-
+    
     if (camps.length === 0) {
         campList.innerHTML = '<li class="list-group-item text-center text-muted">No camps available</li>';
         return;
     }
-
+    
     // Add camps to map and list
     camps.forEach(camp => {
         // Add to map
         const marker = L.marker([camp.location.lat, camp.location.lng], {
             title: camp.name
         }).addTo(map);
-
+        
         marker.bindPopup(`
             <strong>${camp.name}</strong><br>
             Capacity: ${camp.capacity} people<br>
             <button class="btn btn-sm btn-primary mt-2 view-camp-btn" data-camp-id="${camp.id}">View Details</button>
         `);
-
+        
         markers.push(marker);
-
+        
         // Add to list
         const campItem = document.createElement('li');
         campItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-
+        
         campItem.innerHTML = `
             <div>
                 <strong>${camp.name}</strong>
                 <div class="small text-muted">Capacity: ${camp.capacity} people</div>
             </div>
         `;
-
+        
         // Add delete button if logged in
         if (checkLoggedIn()) {
             const deleteBtn = document.createElement('button');
@@ -109,10 +106,10 @@ function loadCamps() {
             deleteBtn.addEventListener('click', function() {
                 deleteCampById(camp.id);
             });
-
+            
             campItem.appendChild(deleteBtn);
         }
-
+        
         campItem.addEventListener('click', function() {
             // Center map on camp location and open popup
             map.setView([camp.location.lat, camp.location.lng], 13);
@@ -123,10 +120,10 @@ function loadCamps() {
                 }
             });
         });
-
+        
         campList.appendChild(campItem);
     });
-
+    
     // Fit map to show all markers
     if (markers.length > 0) {
         const group = L.featureGroup(markers);
@@ -143,15 +140,15 @@ function setupEventListeners() {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
-
+                    
                     selectedLocation = { lat, lng };
                     document.getElementById('campLat').value = lat.toFixed(6);
                     document.getElementById('campLng').value = lng.toFixed(6);
-
+                    
                     if (userMarker) {
                         map.removeLayer(userMarker);
                     }
-
+                    
                     userMarker = L.marker([lat, lng], {
                         icon: L.divIcon({
                             className: 'selected-location-marker',
@@ -160,7 +157,7 @@ function setupEventListeners() {
                             iconAnchor: [6, 6]
                         })
                     }).addTo(map);
-
+                    
                     map.setView([lat, lng], 13);
                 }, function(error) {
                     alert('Error getting location: ' + error.message);
@@ -170,7 +167,7 @@ function setupEventListeners() {
             }
         });
     }
-
+    
     // Clear location button
     const clearLocationBtn = document.getElementById('clearLocationBtn');
     if (clearLocationBtn) {
@@ -179,27 +176,27 @@ function setupEventListeners() {
                 map.removeLayer(userMarker);
                 userMarker = null;
             }
-
+            
             selectedLocation = null;
             document.getElementById('campLat').value = '';
             document.getElementById('campLng').value = '';
         });
     }
-
+    
     // Add camp form submission
     const addCampForm = document.getElementById('addCampForm');
     if (addCampForm) {
         addCampForm.addEventListener('submit', function(e) {
             e.preventDefault();
-
+            
             if (!selectedLocation) {
                 alert('Please select a location on the map or use your current location.');
                 return;
             }
-
+            
             const campName = document.getElementById('campName').value;
             const campCapacity = document.getElementById('campCapacity').value;
-
+            
             const newCamp = {
                 name: campName,
                 capacity: parseInt(campCapacity),
@@ -208,9 +205,9 @@ function setupEventListeners() {
                     lng: selectedLocation.lng
                 }
             };
-
+            
             saveCamp(newCamp);
-
+            
             // Reset form
             addCampForm.reset();
             if (userMarker) {
@@ -218,10 +215,10 @@ function setupEventListeners() {
                 userMarker = null;
             }
             selectedLocation = null;
-
+            
             // Reload camps
             loadCamps();
-
+            
             alert('Camp added successfully!');
         });
     }
@@ -234,50 +231,5 @@ function deleteCampById(campId) {
         } else {
             alert('Error deleting camp.');
         }
-    }
-}
-
-
-function showUserCurrentLocation() {
-    // Remove existing user location elements if they exist
-    if (userLocationMarker) {
-        map.removeLayer(userLocationMarker);
-        userLocationMarker = null;
-    }
-    if (userLocationCircle) {
-        map.removeLayer(userLocationCircle);
-        userLocationCircle = null;
-    }
-
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-
-            // Create a custom marker for user location
-            userLocationMarker = L.marker([lat, lng], {
-                icon: L.divIcon({
-                    className: 'user-location-marker',
-                    html: '<div class="user-location-dot"><i class="fas fa-map-marker-alt"></i></div>',
-                    iconSize: [30, 30],
-                    iconAnchor: [15, 30]
-                }),
-                zIndexOffset: 1000
-            }).addTo(map);
-
-            // Add a circle to indicate accuracy range
-            userLocationCircle = L.circle([lat, lng], {
-                radius: position.coords.accuracy,
-                color: '#007BFF',
-                fillColor: '#007BFF',
-                fillOpacity: 0.2
-            }).addTo(map);
-
-            map.setView([lat, lng], 13); //Added to center map on user location
-        }, function(error) {
-            alert('Error getting location: ' + error.message);
-        });
-    } else {
-        alert('Geolocation is not supported by this browser.');
     }
 }
