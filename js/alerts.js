@@ -55,6 +55,7 @@ function initAlertMap() {
         });
     }
 }
+}
 
 function updateAlertRadiusPreview() {
     // Remove existing preview
@@ -189,6 +190,27 @@ function setupAlertEventListeners() {
     const alertRadius = document.getElementById('alertRadius');
     if (alertRadius) {
         alertRadius.addEventListener('input', updateAlertRadiusPreview);
+    }
+    
+    // Update map from coordinates button
+    const updateAlertMapFromCoordsBtn = document.getElementById('updateAlertMapFromCoords');
+    if (updateAlertMapFromCoordsBtn) {
+        updateAlertMapFromCoordsBtn.addEventListener('click', function() {
+            const lat = parseFloat(document.getElementById('alertLat').value);
+            const lng = parseFloat(document.getElementById('alertLng').value);
+            
+            if (!isNaN(lat) && !isNaN(lng)) {
+                alertSelectedLocation = L.latLng(lat, lng);
+                
+                // Update radius visualization
+                updateAlertRadiusPreview();
+                
+                // Center map on new coordinates
+                alertMap.panTo(alertSelectedLocation);
+            } else {
+                alert('Please enter valid coordinates');
+            }
+        });
     }
 
     // Add alert form submission

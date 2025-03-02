@@ -41,21 +41,28 @@ function initMap() {
             document.getElementById('campLat').value = selectedLocation.lat.toFixed(6);
             document.getElementById('campLng').value = selectedLocation.lng.toFixed(6);
 
-            // Show a temporary marker
-            if (userMarker) {
-                map.removeLayer(userMarker);
-            }
-
-            userMarker = L.marker(selectedLocation, {
-                icon: L.divIcon({
-                    className: 'selected-location-marker',
-                    html: '<div style="background-color: #ff9800; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white;"></div>',
-                    iconSize: [12, 12],
-                    iconAnchor: [6, 6]
-                })
-            }).addTo(map);
+            updateSelectedLocationMarker(selectedLocation);
         });
     }
+}
+
+function updateSelectedLocationMarker(location) {
+    // Show a temporary marker
+    if (userMarker) {
+        map.removeLayer(userMarker);
+    }
+
+    userMarker = L.marker(location, {
+        icon: L.divIcon({
+            className: 'selected-location-marker',
+            html: '<div style="background-color: #ff9800; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white;"></div>',
+            iconSize: [12, 12],
+            iconAnchor: [6, 6]
+        })
+    }).addTo(map);
+    
+    // Pan the map to the selected location
+    map.panTo(location);
 }
 
 function loadCamps() {
@@ -142,18 +149,19 @@ function setupEventListeners() {
             showUserCurrentLocation();
         });
     }
-
-    // Clear location button
-    const clearLocationBtn = document.getElementById('clearLocationBtn');
-    if (clearLocationBtn) {
-        clearLocationBtn.addEventListener('click', function() {
-            if (userLocationMarker) {
-                map.removeLayer(userLocationMarker);
-                userLocationMarker = null;
-            }
-            if (userLocationCircle) {
-                map.removeLayer(userLocationCircle);
-                userLocationCircle = null;
+    
+    // Update map from coordinates button
+    const updateMapFromCoordsBtn = document.getElementById('updateMapFromCoords');
+    if (updateMapFromCoordsBtn) {
+        updateMapFromCoordsBtn.addEventListener('click', function() {
+            const lat = parseFloat(document.getElementById('campLat').value);
+            const lng = parseFloat(document.getElementById('campLng').value);
+            
+            if (!isNaN(lat) && !isNaN(lng)) {
+                selectedLocation = L.latLng(lat, lng);
+                updateSelectedLocationMarker(selectedLocation);
+            } else {
+                alert('Please enter valid coordinates');
             }
         });
     }
@@ -220,6 +228,12 @@ function showUserCurrentLocation() {
         map.removeLayer(userLocationCircle);
         userLocationCircle = null;
     }
+    
+    // Also clear selected location marker if exists
+    if (userMarker) {
+        map.removeLayer(userMarker);
+        userMarker = null;
+    }
 
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -244,6 +258,12 @@ function showUserCurrentLocation() {
                 fillColor: '#007BFF',
                 fillOpacity: 0.2
             }).addTo(map);
+            
+            // Set the coordinates in the input fields and update selected location
+            document.getElementById('campLat').value = lat.toFixed(6);
+            document.getElementById('campLng').value = lng.toFixed(6);
+            selectedLocation = L.latLng(lat, lng);
+            
         }, function(error) {
             alert('Error getting location: ' + error.message);
         });

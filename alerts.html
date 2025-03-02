@@ -117,11 +117,18 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Location</label>
-                                <p class="small text-muted">Click on the map to select location</p>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="alertLat" placeholder="Latitude" readonly>
-                                    <input type="text" class="form-control" id="alertLng" placeholder="Longitude" readonly>
+                                <p class="small text-muted">Click on the map or enter coordinates manually</p>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">Lat</span>
+                                    <input type="number" step="0.000001" class="form-control" id="alertLat" placeholder="Latitude">
                                 </div>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">Lng</span>
+                                    <input type="number" step="0.000001" class="form-control" id="alertLng" placeholder="Longitude">
+                                </div>
+                                <button type="button" class="btn btn-outline-secondary" id="updateAlertMapFromCoords">
+                                    <i class="fas fa-map-pin me-1"></i>Update Map
+                                </button>
                             </div>
                             <div class="mb-3">
                                 <label for="alertRadius" class="form-label">Affected Area Radius (km)</label>
