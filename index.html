@@ -49,43 +49,89 @@
         </div>
     </nav>
 
+    <!-- Hero Banner -->
+    <div class="hero-banner">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 text-white fw-bold">Camp Manager</h1>
+                    <p class="lead text-white-75">Coordinating disaster relief efforts efficiently and effectively</p>
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+                        <a href="resources.html" class="btn btn-light btn-lg px-4">Request Resources</a>
+                        <a href="camps.html" class="btn btn-outline-light btn-lg px-4">Find Camps</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Content -->
-    <div class="container my-4">
-        <h1 class="mb-4">Dashboard</h1>
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="fw-bold">Dashboard Overview</h2>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-sync-alt me-2" id="refreshDashboard"></i>
+                        <span class="small text-muted">Last updated: <span id="lastUpdated">Just now</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <!-- Dashboard Stats -->
-        <div class="row mb-4">
+        <div class="row mb-5">
             <div class="col-md-3">
-                <div class="card text-center border-primary h-100">
+                <div class="card text-center border-primary h-100 dashboard-card">
                     <div class="card-body">
+                        <div class="icon-circle bg-primary text-white mb-3">
+                            <i class="fas fa-campground fa-2x"></i>
+                        </div>
                         <h5 class="card-title">Total Camps</h5>
-                        <p class="card-text display-4" id="totalCamps">0</p>
+                        <p class="card-text display-4 fw-bold" id="totalCamps">0</p>
+                        <p class="text-muted small">Active relief centers</p>
                     </div>
                 </div>
             </div>
             
             <div class="col-md-9">
-                <div class="card border-success h-100">
+                <div class="card border-success h-100 dashboard-card">
                     <div class="card-header bg-success text-white">
-                        <h5 class="mb-0">Resource Distribution</h5>
+                        <h5 class="mb-0"><i class="fas fa-boxes me-2"></i>Resource Distribution</h5>
                     </div>
                     <div class="card-body">
                         <div class="row text-center">
-                            <div class="col">
+                            <div class="col resource-stat">
+                                <div class="icon-circle bg-info text-white mb-2">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
                                 <h6>Food</h6>
-                                <p class="display-6" id="foodCount">0</p>
+                                <p class="display-6 fw-bold" id="foodCount">0</p>
+                                <p class="text-muted small">Units available</p>
                             </div>
-                            <div class="col">
+                            <div class="col resource-stat">
+                                <div class="icon-circle bg-success text-white mb-2">
+                                    <i class="fas fa-home"></i>
+                                </div>
                                 <h6>Shelter</h6>
-                                <p class="display-6" id="shelterCount">0</p>
+                                <p class="display-6 fw-bold" id="shelterCount">0</p>
+                                <p class="text-muted small">Units available</p>
                             </div>
-                            <div class="col">
+                            <div class="col resource-stat">
+                                <div class="icon-circle bg-warning text-white mb-2">
+                                    <i class="fas fa-tshirt"></i>
+                                </div>
                                 <h6>Clothes</h6>
-                                <p class="display-6" id="clothesCount">0</p>
+                                <p class="display-6 fw-bold" id="clothesCount">0</p>
+                                <p class="text-muted small">Units available</p>
                             </div>
-                            <div class="col">
+                            <div class="col resource-stat">
+                                <div class="icon-circle bg-danger text-white mb-2">
+                                    <i class="fas fa-pills"></i>
+                                </div>
                                 <h6>Medicine</h6>
-                                <p class="display-6" id="medicineCount">0</p>
+                                <p class="display-6 fw-bold" id="medicineCount">0</p>
+                                <p class="text-muted small">Units available</p>
                             </div>
                         </div>
                     </div>
