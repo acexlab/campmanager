@@ -252,7 +252,8 @@ function showUserCurrentLocationOnAlertMap() {
                     html: '<div class="user-location-dot"><i class="fas fa-map-marker-alt"></i></div>',
                     iconSize: [30, 30],
                     iconAnchor: [15, 30]
-                })
+                }),
+                zIndexOffset: 1000
             }).addTo(alertMap);
             
             // Add a circle to indicate accuracy range
