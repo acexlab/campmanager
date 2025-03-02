@@ -55,7 +55,6 @@ function initAlertMap() {
         });
     }
 }
-}
 
 function updateAlertRadiusPreview() {
     // Remove existing preview
@@ -191,20 +190,20 @@ function setupAlertEventListeners() {
     if (alertRadius) {
         alertRadius.addEventListener('input', updateAlertRadiusPreview);
     }
-    
+
     // Update map from coordinates button
     const updateAlertMapFromCoordsBtn = document.getElementById('updateAlertMapFromCoords');
     if (updateAlertMapFromCoordsBtn) {
         updateAlertMapFromCoordsBtn.addEventListener('click', function() {
             const lat = parseFloat(document.getElementById('alertLat').value);
             const lng = parseFloat(document.getElementById('alertLng').value);
-            
+
             if (!isNaN(lat) && !isNaN(lng)) {
                 alertSelectedLocation = L.latLng(lat, lng);
-                
+
                 // Update radius visualization
                 updateAlertRadiusPreview();
-                
+
                 // Center map on new coordinates
                 alertMap.panTo(alertSelectedLocation);
             } else {
@@ -256,6 +255,24 @@ function setupAlertEventListeners() {
             alert('Emergency alert added successfully!');
         });
     }
+
+    //Use My Location button
+    const useLocationBtn = document.getElementById('useLocationForAlertBtn');
+    if (useLocationBtn) {
+        useLocationBtn.addEventListener('click', function() {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                document.getElementById('alertLat').value = lat.toFixed(6);
+                document.getElementById('alertLng').value = lng.toFixed(6);
+                alertSelectedLocation = L.latLng(lat, lng);
+                updateAlertRadiusPreview();
+            }, function(error) {
+                console.error('Error getting location:', error.message);
+                alert('Could not get your location. Please try again later.');
+            });
+        });
+    }
 }
 
 function deleteAlertById(alertId) {
@@ -303,13 +320,13 @@ function showUserCurrentLocationOnAlertMap() {
                 fillColor: '#007BFF',
                 fillOpacity: 0.2
             }).addTo(alertMap);
-            
+
             // Add a popup to the marker
             alertUserLocationMarker.bindPopup("Your current location").openPopup();
-            
+
         }, function(error) {
             console.error('Error getting location:', error.message);
-            
+
             // Show an error message to the user
             if (error.code === 1) {
                 alert('Please allow location access to see your position on the map.');
